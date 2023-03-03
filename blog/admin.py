@@ -1,5 +1,5 @@
 from django.contrib import admin
-from blog.models import Stori,Category ,Comment
+from blog.models import Stori,Category ,Comment ,Reaction
 
 # Register your models here.
 class StoriAdmin(admin.ModelAdmin):
@@ -11,3 +11,4 @@ class StoriAdmin(admin.ModelAdmin):
 admin.site.register(Stori, StoriAdmin)
 admin.site.register(Category)
 admin.site.register(Comment)
+admin.site.register(Reaction)

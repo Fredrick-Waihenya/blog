@@ -5,7 +5,8 @@ from django.utils.text import slugify
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.urls import reverse
-
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.models import ContentType
 class AbstractBaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -22,6 +23,13 @@ class Category(AbstractBaseModel):
     class Meta:
         verbose_name_plural = "Categories"
 
+class Reaction(AbstractBaseModel):
+    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    reaction = models.BooleanField(default=False)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+
 """ Stori """
 """ stori_status """
 STATUS = (
@@ -37,7 +45,7 @@ class Stori(AbstractBaseModel):
     created_by = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True)
     status = models.IntegerField(choices=STATUS, default=0) #"""This here serves to indicate whether a stori has been published or not."""
     category = models.ForeignKey(Category,on_delete=models.PROTECT)
-    
+    reactions = GenericRelation(Reaction)
 
     def __str__(self):
          return f'{self.title} created by: {self.created_by}'
@@ -56,7 +64,7 @@ class Comment(models.Model):
     Post_id = models.ForeignKey(Stori,on_delete= models.CASCADE)
     user = models.ForeignKey(Account, on_delete= models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
-    reactions = models.PositiveIntegerField(default=0)
+    reactions = GenericRelation(Reaction)
     #make the initial comment parent
     parent_comment = models.ForeignKey('self',on_delete=models.CASCADE,blank=True,null=True,related_name='replies')
     class Meta:
@@ -74,16 +82,7 @@ class Comment(models.Model):
             return False
         return True
 
-REACTION_TYPE_CHOICES = (
-    ('Like', 'Like'),
-    ('Dislike', 'Dislike')
-)
 
-class Reaction(AbstractBaseModel):
-    reaction_type = models.CharField(max_length=100, choices=REACTION_TYPE_CHOICES)
-    user = models.ForeignKey(Account, on_delete=models.CASCADE)
-    post = models.ForeignKey(Stori, on_delete=models.CASCADE)
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return self.reaction_type
+
+    
