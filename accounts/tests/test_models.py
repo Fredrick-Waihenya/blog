@@ -22,7 +22,7 @@ class UserVerificationCodeTestCase(TestCase):
         self.assertNotEqual(initial_code, updated_code)
         print(f' Initial code is {initial_code} vs updated code is {updated_code}')     
     
-        user.code_generated_at = timezone.now() - timezone.timedelta(minutes=59)
+        user.code_generated_at = timezone.now() - timezone.timedelta(minutes=15)
         user.save()        
       
         same_code = user.get_verification_code()

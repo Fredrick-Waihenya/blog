@@ -45,7 +45,7 @@ class User(AbstractUser):
     def get_verification_code(self):
         now = time.time()
         elapsed = now - self.code_generated_at.timestamp()
-        if elapsed > 3600: 
+        if elapsed > 900: 
             self.verification_code = generate_verification_code()
             self.code_generated_at = now
             self.save
