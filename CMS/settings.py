@@ -51,7 +51,9 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     #Adding a richtext editor
     'ckeditor',
-    'ckeditor_uploader'
+    'ckeditor_uploader',
+    #django storages
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -224,3 +226,12 @@ CKEDITOR_CONFIGS = {
 
 # minimum user's password length during registration
 USER_PASSWORD_LENGTH = 8
+
+# S3 storages
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+AWS_QUERY_STRING = False
+AWS_ACCESS_KEY_ID =os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY =os.getenv('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME =os.getenv('AWS_STORAGE_BUCKET_NAME')
+AWS_QUERYSTRING_AUTH = False
