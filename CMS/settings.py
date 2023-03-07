@@ -227,7 +227,7 @@ CKEDITOR_CONFIGS = {
 # minimum user's password length during registration
 USER_PASSWORD_LENGTH = 8
 
-# S3 storages
+# boto3 to connect to S3 bucket
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 AWS_QUERY_STRING = False
