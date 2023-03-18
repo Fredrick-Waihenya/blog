@@ -64,7 +64,9 @@ class Comment(models.Model):
     Post_id = models.ForeignKey(Stori,on_delete= models.CASCADE)
     user = models.ForeignKey(Account, on_delete= models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
+
     reactions = GenericRelation(Reaction)
+
     #make the initial comment parent
     parent_comment = models.ForeignKey('self',on_delete=models.CASCADE,blank=True,null=True,related_name='replies')
     class Meta:
